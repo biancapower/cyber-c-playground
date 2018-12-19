@@ -2,7 +2,7 @@
 # eventually this will look like:
 #EXECUTABLES = hexdump keylogger passcheck
 # but for now it's empty
-EXECUTABLES = strings
+EXECUTABLES = strings hexdump
 # put all executables in `build` directory
 TARGETS = $(patsubst %, build/%, $(EXECUTABLES))
 # default make rule

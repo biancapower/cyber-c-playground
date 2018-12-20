@@ -1,21 +1,60 @@
 #include <stdio.h>
+#include <ctype.h>
 
+const int ROWS = 24;
+const int COLUMNS = 16;
 
-// inspired by Preet
 int main(int argc, char const *argv[]) {
     
     // open a file (store file handle in target_file)
-    FILE *target_file = fopen("hexdump.c", "r");
+    FILE *target_file = fopen(argv[1], "r");
 
     // create somewhere to store file contents
-    char buffer[24];
+    unsigned char buffer[ROWS][COLUMNS];
 
+    int num_bytes_read;
+    
     // read into buffer from file
-    fread(buffer, 1, 62, target_file);
+    num_bytes_read = fread(buffer, 1, ROWS * COLUMNS, target_file);
 
-    for (int i=0; i < 62; i++) {
-        printf("%4d %4c %4x\n", buffer[i], buffer[i], buffer[i]);
+    while (num_bytes_read != 0) {
+        // print entire screenful of file
+        for (int row = 0; row < ROWS; row++) {
+            // print row in hexadecimal
+            for (int col = 0; col < COLUMNS; col++) {
+                if (row * COLUMNS + col < num_bytes_read) {
+                    printf("%02x ", buffer[row][col]);
+                } else {
+                    printf("   ");
+                }
+            }
+            
+            printf("  ");
+            // print row in ASCII
+            for (int col = 0; col < COLUMNS; col++) {
+                if (row * COLUMNS + col < num_bytes_read) {
+
+                    if (isprint(buffer[row][col])) { // make sure it is printable
+                        printf("%c", buffer[row][col]);
+                    } else { // otherwise print a dot
+                        printf(".");
+                    }
+                } else {
+                    printf(" ");
+                }
+            }
+
+            printf("\n");
+        }
+        printf("Please press enter.");
+        getchar();
+
+        // read next chunk from buffer into file
+        num_bytes_read = fread(buffer, 1, ROWS * COLUMNS, target_file);
+
     }
+    
+    printf("\n");
 
     fclose(target_file);
 

@@ -22,6 +22,8 @@ int main(int argc, char const *argv[]) {
         for (int row = 0; row < ROWS; row++) {
             // print row in hexadecimal
             for (int col = 0; col < COLUMNS; col++) {
+
+                // write blanks after end of file
                 if (row * COLUMNS + col < num_bytes_read) {
                     printf("%02x ", buffer[row][col]);
                 } else {
@@ -32,8 +34,9 @@ int main(int argc, char const *argv[]) {
             printf("  ");
             // print row in ASCII
             for (int col = 0; col < COLUMNS; col++) {
-                if (row * COLUMNS + col < num_bytes_read) {
 
+                // write blanks after end of file
+                if (row * COLUMNS + col < num_bytes_read) {
                     if (isprint(buffer[row][col])) { // make sure it is printable
                         printf("%c", buffer[row][col]);
                     } else { // otherwise print a dot
